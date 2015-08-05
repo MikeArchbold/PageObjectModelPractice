@@ -11,17 +11,12 @@ public class HomePage extends Page{
 		
 		HashMap<String, String> homePageMap = new HashMap<String, String>();
 		homePageMap.put("title", "MTA | Subway, Bus, Long Island Rail Road, Metro-North");
-		homePageMap.put("neighborhoods", "mta.info | MTA Neighborhood Maps");
-		homePageMap.put("subway map", "mta.info | MTA Subway Map");
+		homePageMap.put("schedule link", ".//*[@id='menu-399-1']/a");
 		
-		Page.setPage(URL, driver, homePageMap);
+		setPage(URL, homePageMap, driver);
 	}
 	
 	public void clickScheduleButton() throws Exception{
-		clickXPath("title", "neighborhoods", ".//*[@id='menu-415-1']/a");
-	}
-	
-	public void clickSubwayMap() throws Exception{
-		clickLinkText("neighborhoods", "subway map", "Subway System");
+		clickXPath("schedule link");
 	}
 }

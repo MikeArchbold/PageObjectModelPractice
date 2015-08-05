@@ -4,20 +4,22 @@ import java.util.HashMap;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.Select;
 
 public abstract class Page {
 	
-	public static String URL;
+	public String URL;
+	public HashMap<String, String> xpathMap;
 	public static WebDriver driver;
-	public static HashMap<String, String> xpathMap;
 	
-	public static void setPage(String URL, WebDriver driver, HashMap<String, String> xpathMap){
-		Page.URL = URL; 
+	public void setPage(String URL, HashMap<String, String> xpathMap, WebDriver driver){
+		this.URL = URL; 
+		this.xpathMap = xpathMap;
 		Page.driver = driver;
-		Page.xpathMap = xpathMap;
 	}
 
-	public static void verifyPage(String key) throws Exception{
+	public void verifyPage(String key) throws Exception{
 		if (!driver.getTitle().equals(xpathMap.get(key)))
 			throw new Exception(key + " not found");
 	}
@@ -33,28 +35,54 @@ public abstract class Page {
 		}
 	}
 	
-	public void clickXPath(String key1, String key2, String xpath){
-		/* clicks inputed XPath and verifies that starting and ending pages are reached
-		 * two dimensional is for the value of the page verifications and the name of the
-		 * page if there is an error */
+	public void clickID(String ID){
 		try{
-			verifyPage(key1);
-			driver.findElement(By.xpath(xpath)).click();		}
+			driver.findElement(By.id(xpathMap.get(ID))).click();
+		}
 		catch(Exception e){
-			e.printStackTrace();
+			System.out.println("Could not find " + ID + ". Continuing test");
 		}
 	}
 	
-	public void clickLinkText(String key1, String key2, String linkText){
-		/* validates on that is on proper page, clicks link text, validates
-		 * next page has been reach */
+	public void clickXPath(String XPATH){
+		/* clicks inputed XPath. catches exception if not found*/
 		try{
-			verifyPage(key1);
-			driver.findElement(By.linkText(linkText)).click();
-			verifyPage(key2);
+			driver.findElement(By.xpath(xpathMap.get(XPATH))).click();
 		}
 		catch(Exception e){
-			e.printStackTrace();
+			System.out.println("Could not find " + XPATH + ". Continuing test");
+		}
+	}
+	
+	public void clickLinkText(String LINK){
+		/* click link text. catches exception if not found */
+		try{
+			driver.findElement(By.linkText(xpathMap.get(LINK))).click();
+		}
+		catch(Exception e){
+			System.out.println("Could not find " + LINK + ". Continuing test");
+		}
+	}
+	
+	public void clickName(String NAME){
+		/* click link text. catches exception if not found */
+		try{
+			driver.findElement(By.name(xpathMap.get(NAME))).click();
+		}
+		catch(Exception e){
+			System.out.println("Could not find " + NAME + ". Continuing test");
+		}
+	}
+	
+	public void selectFromDropDown(String dropDown, String item){
+		try{
+			WebElement dropDownListBox = driver.findElement(By.xpath(xpathMap.get(dropDown)));
+			Select clickThis = new Select(dropDownListBox);
+			int index = Integer.parseInt(xpathMap.get(item));
+			clickThis.selectByIndex(index);
+		}
+		catch(Exception e){
+			System.out.println("Could not find " + item + " in " + dropDown + ". Continuing test");
 		}
 	}
 }

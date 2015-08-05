@@ -1,13 +1,12 @@
 package tests;
 
-import tests.TestBase;
-
 public class CheckSchedules extends TestBase{
 	
-	public static void main(String[] args) throws Exception{
+	public static void main(String[] args) throws Exception{		
 		homePage.goTo();
 		homePage.clickScheduleButton();
-		homePage.clickSubwayMap();
+		schedules.clickLirrLink();
+		schedules.lirr.scheduleTrip("Syosset", "Penn Station", "7:30", "AM");
 		closeDriver();
 	}
 }
